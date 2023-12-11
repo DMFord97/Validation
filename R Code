@@ -23,6 +23,9 @@ vdata[, reverse_columns] <- 4 - vdata[, reverse_columns]
 # Calculate a total PSS-10 score for each participant
 vdata <- vdata %>% mutate(PSS_total = rowSums(across(PSS_1:PSS_10)))
 
+# Calculate a total EQ-5D score for each participant
+vdata <- vdata %>% mutate(EQ5D_total = rowSums(across(EQ5D_1:EQ5D_5)))
+
 # Descriptive statistics
 vdata %>% summarise(Mean = mean(HSQ_total),
                    SD = sd(HSQ_total),
@@ -62,8 +65,24 @@ vdata %>% count(marital)
 vdata %>% count(surgery)
 vdata %>% count(planned)
 
+# Create seperate dataset for just HSQ items
+var_names <- paste0("HSQ_", 1:67)
+HSQ_items <- select(vdata, all_of(var_names))
 
+# Means and SDs of each HSQ item
+means <- colMeans(HSQ_items)
+sds <- apply(HSQ_items, 2, sd)
+summary_items <- data.frame(Variable = names(means), Mean = round(means, 2), SD = round(sds, 2))
 
-# TEST-RETEST
+# Calculate convergent validity
+cor.test(vdata$HSQ_total, vdata$PSS_total)
+
+# Calculate divergent validity
+cor.test(vdata$HSQ_total, vdata$EQ5D_total)
+
+# Calculate internal consistency (Cronbach’s alpha)
+psych::alpha(HSQ_items)
+
+# Calculate test-retest
 retest <- read_csv("retest_r.csv")
 cor.test(retest$TOTAL1, retest$TOTAL2)
