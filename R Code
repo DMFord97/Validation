@@ -23,6 +23,46 @@ vdata[, reverse_columns] <- 4 - vdata[, reverse_columns]
 # Calculate a total PSS-10 score for each participant
 vdata <- vdata %>% mutate(PSS_total = rowSums(across(PSS_1:PSS_10)))
 
+# Descriptive statistics
+vdata %>% summarise(Mean = mean(HSQ_total),
+                   SD = sd(HSQ_total),
+                   Median = median(HSQ_total),
+                   Minimum = min(HSQ_total),
+                   Maximum = max(HSQ_total))
+vdata %>% summarise(Mean = mean(age_c),
+                   SD = sd(age_c),
+                   Median = median(age_c),
+                   Minimum = min(age_c),
+                   Maximum = max(age_c))
+vdata %>% summarise(Mean = mean(age_h),
+                   SD = sd(age_h),
+                   Median = median(age_h),
+                   Minimum = min(age_h),
+                   Maximum = max(age_h))
+vdata %>% summarise(Mean = mean(stays_life, na.rm = T),
+                   SD = sd(stays_life, na.rm = T),
+                   Median = median(stays_life, na.rm = T),
+                   Minimum = min(stays_life, na.rm = T),
+                   Maximum = max(stays_life, na.rm = T))
+vdata %>% summarise(Mean = mean(stays_year, na.rm = T),
+                   SD = sd(stays_year, na.rm = T),
+                   Median = median(stays_year, na.rm = T),
+                   Minimum = min(stays_year, na.rm = T),
+                   Maximum = max(stays_year, na.rm = T))
+vdata %>% summarise(Mean = mean(LOS, na.rm = T),
+                   SD = sd(LOS, na.rm = T),
+                   Median = median(LOS, na.rm = T),
+                   Minimum = min(LOS, na.rm = T),
+                   Maximum = max(LOS, na.rm = T))
+vdata %>% count(sex)
+vdata %>% count(gender)
+vdata %>% count(ethnicity)
+vdata %>% count(education)
+vdata %>% count(marital)
+vdata %>% count(surgery)
+vdata %>% count(planned)
+
+
 
 # TEST-RETEST
 retest <- read_csv("retest_r.csv")
