@@ -1,5 +1,0 @@
-library(readr)
-
-# TEST-RETEST
-retest <- read_csv("retest_r.csv")
-cor.test(retest$TOTAL1, retest$TOTAL2)

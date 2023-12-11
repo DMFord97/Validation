@@ -1,0 +1,29 @@
+# Code in R (v4.3.1) for the paper: "Psychometric validation of the Hospital Stress Questionnaire"
+
+# Load packages and survey response data
+install.packages("tidyverse")
+library(tidyverse)
+install.packages("psych")
+library(psych)
+install.packages("readr")
+library(readr)
+vdata <- read_csv("vdata.csv")
+View(vdata)
+
+# Set N/A values (i.e. values of 11) in HSQ equal to 1
+vdata <- vdata %>% mutate_at(vars(starts_with("HSQ_")), ~ ifelse(. == 11, 1, .))
+
+# Calculate a total HSQ score for each participant
+vdata <- vdata %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_67)))
+
+# Reverse code items 4, 5, 7, and 8 of PSS-10
+reverse_columns <- c("PSS_4", "PSS_5", "PSS_7", "PSS_8")
+vdata[, reverse_columns] <- 4 - vdata[, reverse_columns]
+
+# Calculate a total PSS-10 score for each participant
+vdata <- vdata %>% mutate(PSS_total = rowSums(across(PSS_1:PSS_10)))
+
+
+# TEST-RETEST
+retest <- read_csv("retest_r.csv")
+cor.test(retest$TOTAL1, retest$TOTAL2)
