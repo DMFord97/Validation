@@ -83,6 +83,32 @@ cor.test(vdata$HSQ_total, vdata$EQ5D_total)
 # Calculate internal consistency (Cronbach’s alpha)
 psych::alpha(HSQ_items)
 
+# Calculate inter-item correlations
+rmatrix <- cor(HSQ_items, use = "complete.obs")
+rmatrix <- as.data.frame(as.table(rmatrix))
+rmatrix$Freq <- round(rmatrix$Freq, 2)
+
+# Create correlation matrix of inter-item correlations (note: this is a 67x67 table, too big for most screens)
+ggplot(rmatrix, aes(Var1, Var2)) +
+      geom_tile(aes(fill = Freq)) +
+      geom_text(aes(label = Freq), size = 5, colour = "black") +
+      scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +
+      theme_minimal()
+
+# Identify any potentially redundant items (i.e. r > .8)
+iic <- rmatrix %>% filter(Var1 != Var2)
+iic2 <- iic %>% filter(Freq >= .7)
+
 # Calculate test-retest
 retest <- read_csv("retest_r.csv")
 cor.test(retest$TOTAL1, retest$TOTAL2)
+
+# Exploratory Factor Analysis
+install.packages("REdaS")
+library(REdaS)
+bart_spher(HSQ_items)
+KMOS(HSQ_items)
+nfactors <- psych::fa.parallel(HSQ_items, fm = "ml", fa = "fa")
+nfactors$fa.values
+psych::fa(HSQ_items, nfactors = 5, rotate = "oblimin", fm = "ml")
+psych::fa(HSQ_items, nfactors = 8, rotate = "oblimin", fm = "ml")
