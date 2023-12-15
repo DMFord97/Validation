@@ -82,8 +82,9 @@ cor.test(vdata$HSQ_total, vdata$EQ5D_total)
 
 # Calculate internal consistency (Cronbach’s alpha)
 HSQ_alpha <- psych::alpha(HSQ_items)
+print(HSQ_alpha)
 
-# Display response percentages
+# Display response frequencies as percentages
 mrange <- as.data.frame(round((HSQ_alpha$response.freq * 100), 1))
 
 # Calculate inter-item correlations
@@ -99,7 +100,7 @@ ggplot(rmatrix, aes(Var1, Var2)) +
 
 # Identify any potentially redundant items (i.e. r > .8)
 iic <- rmatrix %>% filter(Var1 != Var2)
-iic_high <- iic %>% filter(Freq >= .7)     ### none > .8 so checked .7
+iic_high <- iic %>% filter(Freq > .7)  ### no iic's > .8 so checked .7
 
 # Calculate average inter-item correlations for each item
 results_list <- list()
