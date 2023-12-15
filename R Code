@@ -135,14 +135,37 @@ cor.test(retest$TOTAL1, retest$TOTAL2)
 # Remove excluded items
 HSQ_items2 <- HSQ_items[, -c(5, 13, 20, 22, 30, 36, 38, 42, 46, 47, 48, 53, 59, 60, 61, 62, 64, 65, 66, 67)]
 
-# Exploratory Factor Analysis
+### Exploratory Factor Analysis ###
 install.packages("REdaS")
 library(REdaS)
+
+# Bartlett's and KMO
 bart_spher(HSQ_items2)
 KMOS(HSQ_items2)
+
+# Parallel Analysis, Scree plot, and Eigenvalues
 nfactors <- psych::fa.parallel(HSQ_items2, fm = "ml", fa = "fa")
 nfactors$fa.values
-psych::fa(HSQ_items2, nfactors = 6, rotate = "oblimin", fm = "ml")
-psych::fa(HSQ_items2, nfactors = 3, rotate = "oblimin", fm = "ml")
-psych::fa(HSQ_items2, nfactors = 4, rotate = "oblimin", fm = "ml")
 
+# Minimum Average Partial (MAP) test
+VSS(HSQ_items2, n = 7, rotate = "oblimin", fm = "mle")
+
+# EFA for models with 3, 4, and 6 factors
+HSQ_f6 <- psych::fa(HSQ_items2, nfactors = 6, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f6$STATISTIC - HSQ_f6$dof)/(HSQ_f6$null.chisq - HSQ_f6$null.dof))  # Calculate CFI
+print(HSQ_f6)
+HSQ_f3 <- psych::fa(HSQ_items2, nfactors = 3, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f3$STATISTIC - HSQ_f3$dof)/(HSQ_f3$null.chisq - HSQ_f3$null.dof))  # Calculate CFI
+print(HSQ_f3)
+HSQ_f4 <- psych::fa(HSQ_items2, nfactors = 4, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f3$STATISTIC - HSQ_f3$dof)/(HSQ_f3$null.chisq - HSQ_f3$null.dof))  # Calculate CFI
+print(HSQ_f4)
+
+# Exclude items that don't load onto 4-factor model
+HSQ_items3 <- HSQ_items2[, -c(9, 19, 47)]
+View(HSQ_items3)
+
+# Re-run model without bad items
+HSQ_f4b <- psych::fa(HSQ_items3, nfactors = 4, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f3b$STATISTIC - HSQ_f3b$dof)/(HSQ_f3b$null.chisq - HSQ_f3b$null.dof))  # Calculate CFI
+print(HSQ_f4b)
