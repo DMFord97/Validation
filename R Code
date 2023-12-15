@@ -68,11 +68,13 @@ vdata %>% count(planned)
 # Create seperate dataset for just HSQ items
 var_names <- paste0("HSQ_", 1:67)
 HSQ_items <- select(vdata, all_of(var_names))
+View(HSQ_items)
 
 # Means and SDs of each HSQ item
 means <- colMeans(HSQ_items)
 sds <- apply(HSQ_items, 2, sd)
-summary_items <- data.frame(Variable = names(means), Mean = round(means, 2), SD = round(sds, 2))
+HSQ_MSD <- data.frame(Variable = names(means), Mean = round(means, 2), SD = round(sds, 2))
+View(HSQ_MSD)
 
 # Calculate convergent validity
 cor.test(vdata$HSQ_total, vdata$PSS_total)
@@ -86,10 +88,12 @@ print(HSQ_alpha)
 
 # Display response frequencies as percentages
 mrange <- as.data.frame(round((HSQ_alpha$response.freq * 100), 1))
+View(mrange)
 
 # Calculate inter-item correlations
 rmatrix <- cor(HSQ_items, use = "complete.obs")
 rmatrix <- as.data.frame(as.table(round(rmatrix, 2)))  ### table easier to read than 67x67 matrix
+View(rmatrix)
 
 # Create correlation matrix of inter-item correlations (note: this is a 67x67 matrix, too big for most screens)
 ggplot(rmatrix, aes(Var1, Var2)) +
@@ -101,6 +105,7 @@ ggplot(rmatrix, aes(Var1, Var2)) +
 # Identify any potentially redundant items (i.e. r > .8)
 iic <- rmatrix %>% filter(Var1 != Var2)
 iic_high <- iic %>% filter(Freq > .7)  ### no iic's > .8 so checked .7
+View(iic_high)
 
 # Calculate average inter-item correlations for each item
 results_list <- list()
@@ -117,20 +122,27 @@ for (variable in var_names) {
   results_list[[variable]] <- results
 }
 avg_iic <- bind_rows(results_list, .id = "Variable")
+View(avg_iic)
 
 # Identify items not correlating well with other items (i.e. < .3)
 iic_low <- avg_iic %>% filter(Mean <= .3 & Median <= .3)
+View(iic_low)
 
 # Calculate test-retest
 retest <- read_csv("retest_r.csv")
 cor.test(retest$TOTAL1, retest$TOTAL2)
 
+# Remove excluded items
+HSQ_items2 <- HSQ_items[, -c(5, 13, 20, 22, 30, 36, 38, 42, 46, 47, 48, 53, 59, 60, 61, 62, 64, 65, 66, 67)]
+
 # Exploratory Factor Analysis
 install.packages("REdaS")
 library(REdaS)
-bart_spher(HSQ_items)
-KMOS(HSQ_items)
-nfactors <- psych::fa.parallel(HSQ_items, fm = "ml", fa = "fa")
+bart_spher(HSQ_items2)
+KMOS(HSQ_items2)
+nfactors <- psych::fa.parallel(HSQ_items2, fm = "ml", fa = "fa")
 nfactors$fa.values
-psych::fa(HSQ_items, nfactors = 5, rotate = "oblimin", fm = "ml")
-psych::fa(HSQ_items, nfactors = 8, rotate = "oblimin", fm = "ml")
+psych::fa(HSQ_items2, nfactors = 6, rotate = "oblimin", fm = "ml")
+psych::fa(HSQ_items2, nfactors = 3, rotate = "oblimin", fm = "ml")
+psych::fa(HSQ_items2, nfactors = 4, rotate = "oblimin", fm = "ml")
+
