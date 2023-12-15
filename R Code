@@ -81,14 +81,16 @@ cor.test(vdata$HSQ_total, vdata$PSS_total)
 cor.test(vdata$HSQ_total, vdata$EQ5D_total)
 
 # Calculate internal consistency (Cronbach’s alpha)
-psych::alpha(HSQ_items)
+HSQ_alpha <- psych::alpha(HSQ_items)
+
+# Display response percentages
+mrange <- as.data.frame(round((HSQ_alpha$response.freq * 100), 1))
 
 # Calculate inter-item correlations
 rmatrix <- cor(HSQ_items, use = "complete.obs")
-rmatrix <- as.data.frame(as.table(rmatrix))
-rmatrix$Freq <- round(rmatrix$Freq, 2)
+rmatrix <- as.data.frame(as.table(round(rmatrix, 2)))  ### table easier to read than 67x67 matrix
 
-# Create correlation matrix of inter-item correlations (note: this is a 67x67 table, too big for most screens)
+# Create correlation matrix of inter-item correlations (note: this is a 67x67 matrix, too big for most screens)
 ggplot(rmatrix, aes(Var1, Var2)) +
       geom_tile(aes(fill = Freq)) +
       geom_text(aes(label = Freq), size = 5, colour = "black") +
@@ -97,7 +99,26 @@ ggplot(rmatrix, aes(Var1, Var2)) +
 
 # Identify any potentially redundant items (i.e. r > .8)
 iic <- rmatrix %>% filter(Var1 != Var2)
-iic2 <- iic %>% filter(Freq >= .7)
+iic_high <- iic %>% filter(Freq >= .7)     ### none > .8 so checked .7
+
+# Calculate average inter-item correlations for each item
+results_list <- list()
+for (variable in var_names) {
+  iic_variable <- iic %>% filter(Var2 == variable)
+  results <- iic_variable %>% 
+    summarise(
+      Mean = round(mean(Freq), 2),
+      SD = round(sd(Freq), 2),
+      Median = median(Freq),
+      Minimum = min(Freq),
+      Maximum = max(Freq)
+    )  
+  results_list[[variable]] <- results
+}
+avg_iic <- bind_rows(results_list, .id = "Variable")
+
+# Identify items not correlating well with other items (i.e. < .3)
+iic_low <- avg_iic %>% filter(Mean <= .3 & Median <= .3)
 
 # Calculate test-retest
 retest <- read_csv("retest_r.csv")
