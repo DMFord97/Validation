@@ -158,7 +158,7 @@ HSQ_f3 <- psych::fa(HSQ_items2, nfactors = 3, rotate = "oblimin", fm = "ml")
 1 - ((HSQ_f3$STATISTIC - HSQ_f3$dof)/(HSQ_f3$null.chisq - HSQ_f3$null.dof))  # Calculate CFI
 print(HSQ_f3)
 HSQ_f4 <- psych::fa(HSQ_items2, nfactors = 4, rotate = "oblimin", fm = "ml")
-1 - ((HSQ_f3$STATISTIC - HSQ_f3$dof)/(HSQ_f3$null.chisq - HSQ_f3$null.dof))  # Calculate CFI
+1 - ((HSQ_f4$STATISTIC - HSQ_f4$dof)/(HSQ_f4$null.chisq - HSQ_f4$null.dof))  # Calculate CFI
 print(HSQ_f4)
 
 # Exclude items that don't load >=.4 onto 4-factor model
