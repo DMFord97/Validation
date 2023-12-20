@@ -161,11 +161,29 @@ HSQ_f4 <- psych::fa(HSQ_items2, nfactors = 4, rotate = "oblimin", fm = "ml")
 1 - ((HSQ_f3$STATISTIC - HSQ_f3$dof)/(HSQ_f3$null.chisq - HSQ_f3$null.dof))  # Calculate CFI
 print(HSQ_f4)
 
-# Exclude items that don't load onto 4-factor model
-HSQ_items3 <- HSQ_items2[, -c(9, 19, 47)]
+# Exclude items that don't load >=.4 onto 4-factor model
+HSQ_items3 <- HSQ_items2[, -c(7, 8, 9, 19, 20, 22, 33, 37, 39, 43, 44, 47)]
 View(HSQ_items3)
 
 # Re-run model without bad items
 HSQ_f4b <- psych::fa(HSQ_items3, nfactors = 4, rotate = "oblimin", fm = "ml")
-1 - ((HSQ_f3b$STATISTIC - HSQ_f3b$dof)/(HSQ_f3b$null.chisq - HSQ_f3b$null.dof))  # Calculate CFI
+1 - ((HSQ_f4b$STATISTIC - HSQ_f4b$dof)/(HSQ_f4b$null.chisq - HSQ_f4b$null.dof))  # Calculate CFI
 print(HSQ_f4b)
+
+# Exclude items that don't load >=.4 onto new 4-factor model
+HSQ_items4 <- HSQ_items3[, -c(8, 20, 26)]
+View(HSQ_items4)
+
+# Re-run model without bad items
+HSQ_f4c <- psych::fa(HSQ_items4, nfactors = 4, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f4c$STATISTIC - HSQ_f4c$dof)/(HSQ_f4c$null.chisq - HSQ_f4c$null.dof))  # Calculate CFI
+print(HSQ_f4c)
+
+# Exclude items that don't load >=.4 onto new 4-factor model
+HSQ_items5 <- HSQ_items4[, -c(8, 31)]
+View(HSQ_items5)
+
+# Re-run model without bad items
+HSQ_f4d <- psych::fa(HSQ_items5, nfactors = 4, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f4d$STATISTIC - HSQ_f4d$dof)/(HSQ_f4d$null.chisq - HSQ_f4d$null.dof))  # Calculate CFI
+print(HSQ_f4d)
