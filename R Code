@@ -148,7 +148,7 @@ nfactors <- psych::fa.parallel(HSQ_items2, fm = "ml", fa = "fa")
 nfactors$fa.values
 
 # Minimum Average Partial (MAP) test
-VSS(HSQ_items2, n = 7, rotate = "oblimin", fm = "mle")
+VSS(HSQ_items2, rotate = "oblimin", fm = "mle")
 
 # EFA for models with 3, 4, and 6 factors
 HSQ_f6 <- psych::fa(HSQ_items2, nfactors = 6, rotate = "oblimin", fm = "ml")
