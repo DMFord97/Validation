@@ -132,58 +132,71 @@ View(iic_low)
 retest <- read_csv("retest_r.csv")
 cor.test(retest$TOTAL1, retest$TOTAL2)
 
-# Remove excluded items
-HSQ_items2 <- HSQ_items[, -c(5, 13, 20, 22, 30, 36, 38, 42, 46, 47, 48, 53, 59, 60, 61, 62, 64, 65, 66, 67)]
 
 ### Exploratory Factor Analysis ###
 install.packages("REdaS")
 library(REdaS)
 
 # Bartlett's and KMO
-bart_spher(HSQ_items2)
-KMOS(HSQ_items2)
+bart_spher(HSQ_items)
+KMOS(HSQ_items)
 
 # Parallel Analysis, Scree plot, and Eigenvalues
-nfactors <- psych::fa.parallel(HSQ_items2, fm = "ml", fa = "fa")
+nfactors <- psych::fa.parallel(HSQ_items, fm = "ml", fa = "fa")
 nfactors$fa.values
 
 # Minimum Average Partial (MAP) test
-VSS(HSQ_items2, rotate = "oblimin", fm = "mle")
+VSS(HSQ_items, rotate = "oblimin", fm = "mle")
 
-# EFA for models with 3, 4, and 6 factors
-HSQ_f6 <- psych::fa(HSQ_items2, nfactors = 6, rotate = "oblimin", fm = "ml")
-1 - ((HSQ_f6$STATISTIC - HSQ_f6$dof)/(HSQ_f6$null.chisq - HSQ_f6$null.dof))  # Calculate CFI
-print(HSQ_f6)
-HSQ_f3 <- psych::fa(HSQ_items2, nfactors = 3, rotate = "oblimin", fm = "ml")
-1 - ((HSQ_f3$STATISTIC - HSQ_f3$dof)/(HSQ_f3$null.chisq - HSQ_f3$null.dof))  # Calculate CFI
-print(HSQ_f3)
-HSQ_f4 <- psych::fa(HSQ_items2, nfactors = 4, rotate = "oblimin", fm = "ml")
+# EFA for models with 4, 6, 7, and 8 factors
+HSQ_f4 <- psych::fa(HSQ_items, nfactors = 4, rotate = "oblimin", fm = "ml")
 1 - ((HSQ_f4$STATISTIC - HSQ_f4$dof)/(HSQ_f4$null.chisq - HSQ_f4$null.dof))  # Calculate CFI
 print(HSQ_f4)
+HSQ_f6 <- psych::fa(HSQ_items, nfactors = 6, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f6$STATISTIC - HSQ_f6$dof)/(HSQ_f6$null.chisq - HSQ_f6$null.dof))  # Calculate CFI
+print(HSQ_f6)
+HSQ_f7 <- psych::fa(HSQ_items, nfactors = 7, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f7$STATISTIC - HSQ_f7$dof)/(HSQ_f7$null.chisq - HSQ_f7$null.dof))  # Calculate CFI
+print(HSQ_f7)
+HSQ_f8 <- psych::fa(HSQ_items, nfactors = 8, rotate = "oblimin", fm = "ml")
+1 - ((HSQ_f8$STATISTIC - HSQ_f8$dof)/(HSQ_f8$null.chisq - HSQ_f8$null.dof))  # Calculate CFI
+print(HSQ_f8)
 
-# Exclude items that don't load >=.4 onto 4-factor model
-HSQ_items3 <- HSQ_items2[, -c(7, 8, 9, 19, 20, 22, 33, 37, 39, 43, 44, 47)]
-View(HSQ_items3)
+# Exclude items that don't load >=.3 onto 7-factor model
+HSQ_i60 <- HSQ_items[, -c(22, 23, 26, 30, 50, 55, 65)]
+HSQ_f7b <- psych::fa(HSQ_i60, nfactors = 7, rotate = "oblimin", fm = "ml")
+print(HSQ_f7b)
 
-# Re-run model without bad items
-HSQ_f4b <- psych::fa(HSQ_items3, nfactors = 4, rotate = "oblimin", fm = "ml")
-1 - ((HSQ_f4b$STATISTIC - HSQ_f4b$dof)/(HSQ_f4b$null.chisq - HSQ_f4b$null.dof))  # Calculate CFI
-print(HSQ_f4b)
+# Exclude items that don't load >=.3 onto second 7-factor model
+HSQ_i59 <- HSQ_items[, -c(22, 23, 26, 30, 35, 50, 55, 65)]
+HSQ_f7c <- psych::fa(HSQ_i59, nfactors = 7, rotate = "oblimin", fm = "ml")
+print(HSQ_f7c)
 
-# Exclude items that don't load >=.4 onto new 4-factor model
-HSQ_items4 <- HSQ_items3[, -c(8, 20, 26)]
-View(HSQ_items4)
+Exclude redundant items (correlate >= .7 with several other items)
+HSQ_i56 <- HSQ_items[, -c(5, 20, 22, 23, 26, 29, 30, 35, 50, 55, 65)]
+HSQ_f7d <- psych::fa(HSQ_i56, nfactors = 7, rotate = "oblimin", fm = "ml")
+print(HSQ_f7d)
 
-# Re-run model without bad items
-HSQ_f4c <- psych::fa(HSQ_items4, nfactors = 4, rotate = "oblimin", fm = "ml")
-1 - ((HSQ_f4c$STATISTIC - HSQ_f4c$dof)/(HSQ_f4c$null.chisq - HSQ_f4c$null.dof))  # Calculate CFI
-print(HSQ_f4c)
+# Exclude items that don't load >=.3 onto final model
+HSQ_i55 <- HSQ_items[, -c(5, 20, 22, 23, 26, 29, 30, 35, 49, 50, 55, 65)]
+HSQ_f7e <- psych::fa(HSQ_i55, nfactors = 7, rotate = "oblimin", fm = "ml")
+print(HSQ_f7e)
 
-# Exclude items that don't load >=.4 onto new 4-factor model
-HSQ_items5 <- HSQ_items4[, -c(8, 31)]
-View(HSQ_items5)
+1 - ((HSQ_f7e$STATISTIC - HSQ_f7e$dof)/(HSQ_f7e$null.chisq - HSQ_f7e$null.dof))  # Calculate CFI
 
-# Re-run model without bad items
-HSQ_f4d <- psych::fa(HSQ_items5, nfactors = 4, rotate = "oblimin", fm = "ml")
-1 - ((HSQ_f4d$STATISTIC - HSQ_f4d$dof)/(HSQ_f4d$null.chisq - HSQ_f4d$null.dof))  # Calculate CFI
-print(HSQ_f4d)
+factor1 <- HSQ_items[, c(6, 7, 8, 9, 10, 13, 16, 21, 25, 27, 52)]
+factor2 <- HSQ_items[, c(12, 18, 19, 32, 41, 43, 54, 58)]
+factor3 <- HSQ_items[, c(31, 44, 47, 48, 53, 59, 60, 61, 62, 66, 67)]
+factor4 <- HSQ_items[, c(2, 11, 14, 15, 39, 56, 57)]
+factor5 <- HSQ_items[, c(3, 24, 46, 63, 64)]
+factor6 <- HSQ_items[, c(1, 4, 17, 28, 34, 40, 45, 51)]
+factor7 <- HSQ_items[, c(33, 36, 37, 38, 42)]
+
+psych::alpha(HSQ_i55)
+psych::alpha(factor1)
+psych::alpha(factor2)
+psych::alpha(factor3)
+psych::alpha(factor4)
+psych::alpha(factor5)
+psych::alpha(factor6)
+psych::alpha(factor7)
