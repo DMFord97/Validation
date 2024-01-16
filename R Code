@@ -195,30 +195,34 @@ retest2 <- retest55$HSQ_total[retest55$Session == 2]
 cor.test(retest1, retest2)
 
 # Calculate test-retest for factor 1
-retest_f1 <- retest %>% select(c(HSQ_6, HSQ_7, HSQ_8, HSQ_9, HSQ_10, HSQ_13, HSQ_16, HSQ_21, HSQ_25, HSQ_27, HSQ_52))
+retest_f1 <- retest %>% select(c(Session, HSQ_6, HSQ_7, HSQ_8, HSQ_9, HSQ_10, HSQ_13, HSQ_16, HSQ_21, HSQ_25, HSQ_27, HSQ_52))
 retest_f1 <- retest_f1 %>% mutate(HSQ_total = rowSums(across(HSQ_6:HSQ_52)))
 retest_f1a <- retest_f1$HSQ_total[retest_f1$Session == 1]
 retest_f1b <- retest_f1$HSQ_total[retest_f1$Session == 2]
 cor.test(retest_f1a, retest_f1b)
 
 # Calculate test-retest for factor 2
-retest_f2 <- retest %>% select(c(HSQ_12, HSQ_18, HSQ_19, HSQ_32, HSQ_41, HSQ_43, HSQ_54, HSQ_58))
+retest_f2 <- retest %>% select(c(Session, HSQ_12, HSQ_18, HSQ_19, HSQ_32, HSQ_41, HSQ_43, HSQ_54, HSQ_58))
 retest_f2 <- retest_f2 %>% mutate(HSQ_total = rowSums(across(HSQ_12:HSQ_58)))
 retest_f2a <- retest_f2$HSQ_total[retest_f2$Session == 1]
 retest_f2b <- retest_f2$HSQ_total[retest_f2$Session == 2]
 cor.test(retest_f2a, retest_f2b)
 
 # Calculate test-retest for factor 3
-retest_f3 <- retest %>% select(c(HSQ_31, HSQ_44, HSQ_47, HSQ_48, HSQ_53, HSQ_59, HSQ_60, HSQ_61, HSQ_62, HSQ_66, HSQ_67))
+retest_f3 <- retest %>% select(c(Session, HSQ_31, HSQ_44, HSQ_47, HSQ_48, HSQ_53, HSQ_59, HSQ_60, HSQ_61, HSQ_62, HSQ_66, HSQ_67))
+retest_f3 <- retest_f3 %>% mutate(HSQ_total = rowSums(across(HSQ_31:HSQ_67)))
+retest_f3a <- retest_f3$HSQ_total[retest_f3$Session == 1]
+retest_f3b <- retest_f3$HSQ_total[retest_f3$Session == 2]
+cor.test(retest_f3a, retest_f3b)
 
 # Calculate test-retest for factor 4
-retest_f4 <- retest %>% select(c(HSQ_2, HSQ_11, HSQ_14, HSQ_15, HSQ_39, HSQ_56, HSQ_57))
+retest_f4 <- retest %>% select(c(Session, HSQ_2, HSQ_11, HSQ_14, HSQ_15, HSQ_39, HSQ_56, HSQ_57))
 
 # Calculate test-retest for factor 5
-retest_f5 <- retest %>% select(c(HSQ_3, HSQ_24, HSQ_46, HSQ_63, HSQ_64))
+retest_f5 <- retest %>% select(c(Session, HSQ_3, HSQ_24, HSQ_46, HSQ_63, HSQ_64))
 
 # Calculate test-retest for factor 6
-retest_f6 <- retest %>% select(c(HSQ_1, HSQ_4, HSQ_17, HSQ_28, HSQ_34, HSQ_40, HSQ_45, HSQ_51))
+retest_f6 <- retest %>% select(c(Session, HSQ_1, HSQ_4, HSQ_17, HSQ_28, HSQ_34, HSQ_40, HSQ_45, HSQ_51))
 
 # Calculate test-retest for factor 7
-retest_f7 <- retest %>% select(c(HSQ_33, HSQ_36, HSQ_37, HSQ_38, HSQ_42))
+retest_f7 <- retest %>% select(c(Session, HSQ_33, HSQ_36, HSQ_37, HSQ_38, HSQ_42))
