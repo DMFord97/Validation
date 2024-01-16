@@ -186,7 +186,7 @@ cor.test(HSQ_i55t$HSQ_total, vdata$PSS_total)
 # Calculate divergent validity
 cor.test(HSQ_i55t$HSQ_total, vdata$EQ5D_total)
 
-# Calculate test-retest
+# Calculate test-retest for 55-item scale
 retest <- read_csv("retest.csv")
 retest55 <- retest %>% select(-c(HSQ_5, HSQ_20, HSQ_22, HSQ_23, HSQ_26, HSQ_29, HSQ_30, HSQ_35, HSQ_49, HSQ_50, HSQ_55, HSQ_65))
 retest55 <- retest55 %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_67)))
@@ -195,15 +195,27 @@ retest1 <- retest_temp %>% filter(Session == 1)
 retest2 <- retest_temp %>% filter(Session == 2)
 cor.test(retest1$HSQ_total, retest2$HSQ_total)
 
+# Calculate test-retest for factor 1
 retest_f1 <- retest %>% select(c(HSQ_6, HSQ_7, HSQ_8, HSQ_9, HSQ_10, HSQ_13, HSQ_16, HSQ_21, HSQ_25, HSQ_27, HSQ_52))
 retest_f1 <- retest_f1 %>% mutate(HSQ_total = rowSums(across(HSQ_6:HSQ_52)))
 retest1 <- retest55$HSQ_total[retest55$Session == 1]
 retest2 <- retest55$HSQ_total[retest55$Session == 2]
 cor.test(retest1, retest2)
 
+# Calculate test-retest for factor 2
 retest_f2 <- retest %>% select(c(12, 18, 19, 32, 41, 43, 54, 58))
+
+# Calculate test-retest for factor 3
 retest_f3 <- retest %>% select(c(31, 44, 47, 48, 53, 59, 60, 61, 62, 66, 67))
+
+# Calculate test-retest for factor 4
 retest_f4 <- retest %>% select(c(2, 11, 14, 15, 39, 56, 57))
+
+# Calculate test-retest for factor 5
 retest_f5 <- retest %>% select(c(3, 24, 46, 63, 64))
+
+# Calculate test-retest for factor 6
 retest_f6 <- retest %>% select(c(1, 4, 17, 28, 34, 40, 45, 51))
+
+# Calculate test-retest for factor 7
 retest_f7 <- retest %>% select(c(33, 36, 37, 38, 42))
