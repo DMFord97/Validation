@@ -37,11 +37,6 @@ vdata %>% summarise(Mean = mean(age_c),
                    Median = median(age_c),
                    Minimum = min(age_c),
                    Maximum = max(age_c))
-vdata %>% summarise(Mean = mean(age_h),
-                   SD = sd(age_h),
-                   Median = median(age_h),
-                   Minimum = min(age_h),
-                   Maximum = max(age_h))
 vdata %>% summarise(Mean = mean(stays_life, na.rm = T),
                    SD = sd(stays_life, na.rm = T),
                    Median = median(stays_life, na.rm = T),
@@ -76,16 +71,6 @@ sds <- apply(HSQ_items, 2, sd)
 HSQ_MSD <- data.frame(Variable = names(means), Mean = round(means, 2), SD = round(sds, 2))
 View(HSQ_MSD)
 
-# Calculate convergent validity
-cor.test(vdata$HSQ_total, vdata$PSS_total)
-
-# Calculate divergent validity
-cor.test(vdata$HSQ_total, vdata$EQ5D_total)
-
-# Calculate internal consistency (Cronbach’s alpha)
-HSQ_alpha <- psych::alpha(HSQ_items)
-print(HSQ_alpha)
-
 # Display response frequencies as percentages
 mrange <- as.data.frame(round((HSQ_alpha$response.freq * 100), 1))
 View(mrange)
@@ -95,16 +80,9 @@ rmatrix <- cor(HSQ_items, use = "complete.obs")
 rmatrix <- as.data.frame(as.table(round(rmatrix, 2)))  ### table easier to read than 67x67 matrix
 View(rmatrix)
 
-# Create correlation matrix of inter-item correlations (note: this is a 67x67 matrix, too big for most screens)
-ggplot(rmatrix, aes(Var1, Var2)) +
-      geom_tile(aes(fill = Freq)) +
-      geom_text(aes(label = Freq), size = 5, colour = "black") +
-      scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +
-      theme_minimal()
-
-# Identify any potentially redundant items (i.e. r > .8)
+# Identify any potentially redundant items (i.e. r >= 0.7)
 iic <- rmatrix %>% filter(Var1 != Var2)
-iic_high <- iic %>% filter(Freq > .7)  ### no iic's > .8 so checked .7
+iic_high <- iic %>% filter(Freq >= .7)
 View(iic_high)
 
 # Calculate average inter-item correlations for each item
@@ -124,13 +102,9 @@ for (variable in var_names) {
 avg_iic <- bind_rows(results_list, .id = "Variable")
 View(avg_iic)
 
-# Identify items not correlating well with other items (i.e. < .3)
+# Identify items not correlating well with other items (i.e. < 0.3)
 iic_low <- avg_iic %>% filter(Mean <= .3 & Median <= .3)
 View(iic_low)
-
-# Calculate test-retest
-retest <- read_csv("retest_r.csv")
-cor.test(retest$TOTAL1, retest$TOTAL2)
 
 
 ### Exploratory Factor Analysis ###
@@ -162,28 +136,29 @@ HSQ_f8 <- psych::fa(HSQ_items, nfactors = 8, rotate = "oblimin", fm = "ml")
 1 - ((HSQ_f8$STATISTIC - HSQ_f8$dof)/(HSQ_f8$null.chisq - HSQ_f8$null.dof))  # Calculate CFI
 print(HSQ_f8)
 
-# Exclude items that don't load >=.3 onto 7-factor model
+# Exclude items that don't load >= 0.3 onto 7-factor model
 HSQ_i60 <- HSQ_items[, -c(22, 23, 26, 30, 50, 55, 65)]
 HSQ_f7b <- psych::fa(HSQ_i60, nfactors = 7, rotate = "oblimin", fm = "ml")
 print(HSQ_f7b)
 
-# Exclude items that don't load >=.3 onto second 7-factor model
+# Exclude items that don't load >= 0.3 onto second 7-factor model
 HSQ_i59 <- HSQ_items[, -c(22, 23, 26, 30, 35, 50, 55, 65)]
 HSQ_f7c <- psych::fa(HSQ_i59, nfactors = 7, rotate = "oblimin", fm = "ml")
 print(HSQ_f7c)
 
-Exclude redundant items (correlate >= .7 with several other items)
+Exclude redundant items (correlated >= 0.7 with several other items)
 HSQ_i56 <- HSQ_items[, -c(5, 20, 22, 23, 26, 29, 30, 35, 50, 55, 65)]
 HSQ_f7d <- psych::fa(HSQ_i56, nfactors = 7, rotate = "oblimin", fm = "ml")
 print(HSQ_f7d)
 
-# Exclude items that don't load >=.3 onto final model
+# Exclude items that don't load >= 0.3 onto final model
 HSQ_i55 <- HSQ_items[, -c(5, 20, 22, 23, 26, 29, 30, 35, 49, 50, 55, 65)]
 HSQ_f7e <- psych::fa(HSQ_i55, nfactors = 7, rotate = "oblimin", fm = "ml")
 print(HSQ_f7e)
 
-1 - ((HSQ_f7e$STATISTIC - HSQ_f7e$dof)/(HSQ_f7e$null.chisq - HSQ_f7e$null.dof))  # Calculate CFI
+1 - ((HSQ_f7e$STATISTIC - HSQ_f7e$dof)/(HSQ_f7e$null.chisq - HSQ_f7e$null.dof))  # Calculate CFI of final model
 
+# Create factors
 factor1 <- HSQ_items[, c(6, 7, 8, 9, 10, 13, 16, 21, 25, 27, 52)]
 factor2 <- HSQ_items[, c(12, 18, 19, 32, 41, 43, 54, 58)]
 factor3 <- HSQ_items[, c(31, 44, 47, 48, 53, 59, 60, 61, 62, 66, 67)]
@@ -192,6 +167,7 @@ factor5 <- HSQ_items[, c(3, 24, 46, 63, 64)]
 factor6 <- HSQ_items[, c(1, 4, 17, 28, 34, 40, 45, 51)]
 factor7 <- HSQ_items[, c(33, 36, 37, 38, 42)]
 
+# Calculate internal consistency for 55-item scale and each factor
 psych::alpha(HSQ_i55)
 psych::alpha(factor1)
 psych::alpha(factor2)
@@ -200,3 +176,34 @@ psych::alpha(factor4)
 psych::alpha(factor5)
 psych::alpha(factor6)
 psych::alpha(factor7)
+
+# Calculate total score for 55-item version of scale
+HSQ_i55t <- HSQ_i55 %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_67)))
+
+# Calculate convergent validity
+cor.test(HSQ_i55t$HSQ_total, vdata$PSS_total)
+
+# Calculate divergent validity
+cor.test(HSQ_i55t$HSQ_total, vdata$EQ5D_total)
+
+# Calculate test-retest
+retest <- read_csv("retest.csv")
+retest55 <- retest %>% select(-c(HSQ_5, HSQ_20, HSQ_22, HSQ_23, HSQ_26, HSQ_29, HSQ_30, HSQ_35, HSQ_49, HSQ_50, HSQ_55, HSQ_65))
+retest55 <- retest55 %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_67)))
+retest_temp <- retest55 %>% select(Session, HSQ_total)
+retest1 <- retest_temp %>% filter(Session == 1)
+retest2 <- retest_temp %>% filter(Session == 2)
+cor.test(retest1$HSQ_total, retest2$HSQ_total)
+
+retest_f1 <- retest %>% select(c(HSQ_6, HSQ_7, HSQ_8, HSQ_9, HSQ_10, HSQ_13, HSQ_16, HSQ_21, HSQ_25, HSQ_27, HSQ_52))
+retest_f1 <- retest_f1 %>% mutate(HSQ_total = rowSums(across(HSQ_6:HSQ_52)))
+retest1 <- retest55$HSQ_total[retest55$Session == 1]
+retest2 <- retest55$HSQ_total[retest55$Session == 2]
+cor.test(retest1, retest2)
+
+retest_f2 <- retest %>% select(c(12, 18, 19, 32, 41, 43, 54, 58))
+retest_f3 <- retest %>% select(c(31, 44, 47, 48, 53, 59, 60, 61, 62, 66, 67))
+retest_f4 <- retest %>% select(c(2, 11, 14, 15, 39, 56, 57))
+retest_f5 <- retest %>% select(c(3, 24, 46, 63, 64))
+retest_f6 <- retest %>% select(c(1, 4, 17, 28, 34, 40, 45, 51))
+retest_f7 <- retest %>% select(c(33, 36, 37, 38, 42))
