@@ -243,3 +243,19 @@ retest_f7a <- retest_f7$HSQ_total[retest_f7$Session == 1]
 retest_f7b <- retest_f7$HSQ_total[retest_f7$Session == 2]
 cor.test(retest_f7a, retest_f7b)
 
+# Medium-length version (28-items)
+HSQ28 <- HSQ_items[, c(16, 7, 52, 21, 32, 19, 18, 43, 61, 66, 59, 60, 15, 56, 11, 39, 63, 3, 46, 24, 4, 28, 34, 17, 36, 38, 37, 42)]
+f28_1 <- HSQ_items[, c(16, 7, 52, 21)]  #factor1
+psych::alpha(f28_1)
+f28_2 <- HSQ_items[, c(32, 19, 18, 43)]  #factor2
+psych::alpha(f28_2)
+f28_3 <- HSQ_items[, c(61, 66, 59, 60)]  #factor3
+psych::alpha(f28_3)
+f28_4 <- HSQ_items[, c(15, 56, 11, 39)]  #factor4
+psych::alpha(f28_4)
+f28_5 <- HSQ_items[, c(63, 3, 46, 24)]  #factor5
+psych::alpha(f28_5)
+f28_6 <- HSQ_items[, c(4, 28, 34, 17)]  #factor6
+psych::alpha(f28_6)
+f28_7 <- HSQ_items[, c(36, 38, 37, 42)]  #factor7
+psych::alpha(f28_7)
