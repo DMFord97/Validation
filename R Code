@@ -195,49 +195,49 @@ retest2 <- retest55$HSQ_total[retest55$Session == 2]
 cor.test(retest1, retest2)
 
 # Calculate test-retest for factor 1
-retest_f1 <- retest %>% select(c(Session, HSQ_6, HSQ_7, HSQ_8, HSQ_9, HSQ_10, HSQ_13, HSQ_16, HSQ_21, HSQ_25, HSQ_27, HSQ_52))
+retest_f1 <- retest %>% select(Session, HSQ_6, HSQ_7, HSQ_8, HSQ_9, HSQ_10, HSQ_13, HSQ_16, HSQ_21, HSQ_25, HSQ_27, HSQ_52)
 retest_f1 <- retest_f1 %>% mutate(HSQ_total = rowSums(across(HSQ_6:HSQ_52)))
 retest_f1a <- retest_f1$HSQ_total[retest_f1$Session == 1]
 retest_f1b <- retest_f1$HSQ_total[retest_f1$Session == 2]
 cor.test(retest_f1a, retest_f1b)
 
 # Calculate test-retest for factor 2
-retest_f2 <- retest %>% select(c(Session, HSQ_12, HSQ_18, HSQ_19, HSQ_32, HSQ_41, HSQ_43, HSQ_54, HSQ_58))
+retest_f2 <- retest %>% select(Session, HSQ_12, HSQ_18, HSQ_19, HSQ_32, HSQ_41, HSQ_43, HSQ_54, HSQ_58)
 retest_f2 <- retest_f2 %>% mutate(HSQ_total = rowSums(across(HSQ_12:HSQ_58)))
 retest_f2a <- retest_f2$HSQ_total[retest_f2$Session == 1]
 retest_f2b <- retest_f2$HSQ_total[retest_f2$Session == 2]
 cor.test(retest_f2a, retest_f2b)
 
 # Calculate test-retest for factor 3
-retest_f3 <- retest %>% select(c(Session, HSQ_31, HSQ_44, HSQ_47, HSQ_48, HSQ_53, HSQ_59, HSQ_60, HSQ_61, HSQ_62, HSQ_66, HSQ_67))
+retest_f3 <- retest %>% select(Session, HSQ_31, HSQ_44, HSQ_47, HSQ_48, HSQ_53, HSQ_59, HSQ_60, HSQ_61, HSQ_62, HSQ_66, HSQ_67)
 retest_f3 <- retest_f3 %>% mutate(HSQ_total = rowSums(across(HSQ_31:HSQ_67)))
 retest_f3a <- retest_f3$HSQ_total[retest_f3$Session == 1]
 retest_f3b <- retest_f3$HSQ_total[retest_f3$Session == 2]
 cor.test(retest_f3a, retest_f3b)
 
 # Calculate test-retest for factor 4
-retest_f4 <- retest %>% select(c(Session, HSQ_2, HSQ_11, HSQ_14, HSQ_15, HSQ_39, HSQ_56, HSQ_57))
+retest_f4 <- retest %>% select(Session, HSQ_2, HSQ_11, HSQ_14, HSQ_15, HSQ_39, HSQ_56, HSQ_57)
 retest_f4 <- retest_f4 %>% mutate(HSQ_total = rowSums(across(HSQ_2:HSQ_57)))
 retest_f4a <- retest_f4$HSQ_total[retest_f4$Session == 1]
 retest_f4b <- retest_f4$HSQ_total[retest_f4$Session == 2]
 cor.test(retest_f4a, retest_f4b)
 
 # Calculate test-retest for factor 5
-retest_f5 <- retest %>% select(c(Session, HSQ_3, HSQ_24, HSQ_46, HSQ_63, HSQ_64))
+retest_f5 <- retest %>% select(Session, HSQ_3, HSQ_24, HSQ_46, HSQ_63, HSQ_64)
 retest_f5 <- retest_f5 %>% mutate(HSQ_total = rowSums(across(HSQ_3:HSQ_64)))
 retest_f5a <- retest_f5$HSQ_total[retest_f5$Session == 1]
 retest_f5b <- retest_f5$HSQ_total[retest_f5$Session == 2]
 cor.test(retest_f5a, retest_f5b)
 
 # Calculate test-retest for factor 6
-retest_f6 <- retest %>% select(c(Session, HSQ_1, HSQ_4, HSQ_17, HSQ_28, HSQ_34, HSQ_40, HSQ_45, HSQ_51))
+retest_f6 <- retest %>% select(Session, HSQ_1, HSQ_4, HSQ_17, HSQ_28, HSQ_34, HSQ_40, HSQ_45, HSQ_51)
 retest_f6 <- retest_f6 %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_51)))
 retest_f6a <- retest_f6$HSQ_total[retest_f6$Session == 1]
 retest_f6b <- retest_f6$HSQ_total[retest_f6$Session == 2]
 cor.test(retest_f6a, retest_f6b)
 
 # Calculate test-retest for factor 7
-retest_f7 <- retest %>% select(c(Session, HSQ_33, HSQ_36, HSQ_37, HSQ_38, HSQ_42))
+retest_f7 <- retest %>% select(Session, HSQ_33, HSQ_36, HSQ_37, HSQ_38, HSQ_42)
 retest_f7 <- retest_f7 %>% mutate(HSQ_total = rowSums(across(HSQ_33:HSQ_42)))
 retest_f7a <- retest_f7$HSQ_total[retest_f7$Session == 1]
 retest_f7b <- retest_f7$HSQ_total[retest_f7$Session == 2]
@@ -259,3 +259,22 @@ f28_6 <- HSQ_items[, c(4, 28, 34, 17)]  #factor6
 psych::alpha(f28_6)
 f28_7 <- HSQ_items[, c(36, 38, 37, 42)]  #factor7
 psych::alpha(f28_7)
+
+# Construct validity, medium-length
+HSQ28$HSQ_total <- rowSums(HSQ28)
+cor.test(HSQ28$HSQ_total, vdata$PSS_total)  # convergent
+cor.test(HSQ28$HSQ_total, vdata$EQ5D_total)  # divergent
+
+# Test-retest, medium-length
+retest28 <- retest %>% select(Session,
+                              HSQ_16, HSQ_7, HSQ_52, HSQ_21,
+                              HSQ_32, HSQ_19, HSQ_18, HSQ_43,
+                              HSQ_61, HSQ_66, HSQ_59, HSQ_60,
+                              HSQ_15, HSQ_56, HSQ_11, HSQ_39,
+                              HSQ_63, HSQ_3, HSQ_46, HSQ_24,
+                              HSQ_4, HSQ_28, HSQ_34, HSQ_17,
+                              HSQ_36, HSQ_38, HSQ_37, HSQ_42)
+retest28 <- retest28 %>% mutate(HSQ_total = rowSums(across(HSQ_16:HSQ_42)))
+retest28_1 <- retest28$HSQ_total[retest28$Session == 1]
+retest28_2 <- retest28$HSQ_total[retest28$Session == 2]
+cor.test(retest28_1, retest28_2)
