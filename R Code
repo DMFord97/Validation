@@ -278,3 +278,12 @@ retest28 <- retest28 %>% mutate(HSQ_total = rowSums(across(HSQ_16:HSQ_42)))
 retest28_1 <- retest28$HSQ_total[retest28$Session == 1]
 retest28_2 <- retest28$HSQ_total[retest28$Session == 2]
 cor.test(retest28_1, retest28_2)
+
+# Other validation
+vdata55 <- vdata %>% select(-c(HSQ_5, HSQ_20, HSQ_22, HSQ_23, HSQ_26, HSQ_29, HSQ_30, HSQ_35, HSQ_49, HSQ_50, HSQ_55, HSQ_65))
+vdata55 <- vdata55 %>% mutate(HSQ_total55 = rowSums(across(HSQ_1:HSQ_67)))
+HSQ_planned <- vdata55$HSQ_total55[vdata55$planned == 1]
+HSQ_emergency <- vdata55$HSQ_total55[vdata55$planned == 2]
+t.test(HSQ_planned,HSQ_emergency)
+cor.test(vdata55$LOS, vdata55$HSQ_total55)
+cor.test(vdata55$HSQ_total55, vdata55$EQ5D_VAS)
