@@ -279,6 +279,16 @@ retest28_1 <- retest28$HSQ_total[retest28$Session == 1]
 retest28_2 <- retest28$HSQ_total[retest28$Session == 2]
 cor.test(retest28_1, retest28_2)
 
+# Short-length version (10 items)
+HSQ10 <- HSQ_items[, c(52, 44, 6, 51, 27, 16, 11, 41, 37, 24)]
+psych::alpha(HSQ10)
+HSQ10$HSQ_total <- rowSums(HSQ10)
+cor.test(HSQ10$HSQ_total, vdata$PSS_total)  # convergent
+retest10 <- retest %>% select(Session, HSQ_52, HSQ_44, HSQ_6, HSQ_51, HSQ_27, HSQ_16, HSQ_11, HSQ_41, HSQ_37, HSQ_24)
+retest10_1 <- retest10$HSQ_total[retest10$Session == 1]
+retest10_2 <- retest10$HSQ_total[retest10$Session == 2]
+cor.test(retest10_1, retest10_2)
+
 # Other validation
 vdata55 <- vdata %>% select(-c(HSQ_5, HSQ_20, HSQ_22, HSQ_23, HSQ_26, HSQ_29, HSQ_30, HSQ_35, HSQ_49, HSQ_50, HSQ_55, HSQ_65))
 vdata55 <- vdata55 %>% mutate(HSQ_total55 = rowSums(across(HSQ_1:HSQ_67)))
