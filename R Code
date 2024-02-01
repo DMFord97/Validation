@@ -280,7 +280,16 @@ HSQ28$HSQ_total <- rowSums(HSQ28)
 cor.test(HSQ28$HSQ_total, vdata$PSS_total)
 
 # Discriminant validity, HSQ-28
-
+vdata55 <- vdata55 %>% mutate(HSQ_total28 = HSQ_16 + HSQ_7 + HSQ_52 + HSQ_21 +
+                                            HSQ_32 + HSQ_19 + HSQ_18 + HSQ_43 +
+                                            HSQ_61 + HSQ_66 + HSQ_59 + HSQ_60 +
+                                            HSQ_15 + HSQ_56 + HSQ_11 + HSQ_39 +
+                                            HSQ_63 + HSQ_3 + HSQ_46 + HSQ_24 +
+                                            HSQ_4 + HSQ_28 + HSQ_34 + HSQ_17 +
+                                            HSQ_36 + HSQ_38 + HSQ_37 + HSQ_42)
+HSQ_planned <- vdata55$HSQ_total28[vdata55$planned == 1]
+HSQ_emergency <- vdata55$HSQ_total28[vdata55$planned == 2]
+t.test(HSQ_planned,HSQ_emergency)
 
 # Predictive validity, HSQ-28
 cor.test(HSQ28$HSQ_total, vdata$EQ5D_VAS)
@@ -311,6 +320,12 @@ HSQ10$HSQ_total <- rowSums(HSQ10)
 
 # Convergent validity, HSQ-10
 cor.test(HSQ10$HSQ_total, vdata$PSS_total)
+
+# Discriminant validity, HSQ-10
+vdata55 <- vdata55 %>% mutate(HSQ_total10 = HSQ_52 + HSQ_44 + HSQ_6 + HSQ_51 + HSQ_27 + HSQ_16 + HSQ_11 + HSQ_41 + HSQ_37 + HSQ_24)
+HSQ_planned <- vdata55$HSQ_total10[vdata55$planned == 1]
+HSQ_emergency <- vdata55$HSQ_total10[vdata55$planned == 2]
+t.test(HSQ_planned,HSQ_emergency)
 
 # Test-retest, HSQ-10
 retest10 <- retest %>% select(Session, HSQ_52, HSQ_44, HSQ_6, HSQ_51, HSQ_27, HSQ_16, HSQ_11, HSQ_41, HSQ_37, HSQ_24)
