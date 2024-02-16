@@ -24,8 +24,7 @@ vdata[, reverse_columns] <- 4 - vdata[, reverse_columns]
 vdata <- vdata %>% mutate(PSS_total = rowSums(across(PSS_1:PSS_10)))
 
 # Calculate a total EQ-5D score for each participant
-eq5d_df <- vdata %>% select(EQ5D_1:EQ5D_5)
-eq5d_df <- eq5d_df %>% rename(MO = EQ5D_1, SC = EQ5D_2, UA = EQ5D_3, PD = EQ5D_4, AD = EQ5D_5)
+eq5d_df <- vdata %>% select(EQ5D_1:EQ5D_5) %>% rename(MO = EQ5D_1, SC = EQ5D_2, UA = EQ5D_3, PD = EQ5D_4, AD = EQ5D_5)
 eq5d_df$index <- eq5d(scores = eq5d_df, version = "5L", type = "VT", country = "England")
 
 # Descriptive statistics
@@ -295,6 +294,7 @@ HSQ_emergency <- vdata55$HSQ_total28[vdata55$planned == 2]
 t.test(HSQ_planned,HSQ_emergency)
 
 # Predictive validity, HSQ-28
+cor.test(HSQ28$HSQ_total, eq5d_df$index)
 cor.test(HSQ28$HSQ_total, vdata$EQ5D_VAS)
 
 # Test-retest, HSQ-28
@@ -338,4 +338,5 @@ retest10_2 <- retest10$HSQ_total[retest10$Session == 2]
 cor.test(retest10_1, retest10_2)
 
 # Predictive validity, HSQ-10
+cor.test(HSQ28$HSQ_total, eq5d_df$index)
 cor.test(HSQ10$HSQ_total, vdata$EQ5D_VAS)
