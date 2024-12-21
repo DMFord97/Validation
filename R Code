@@ -196,62 +196,74 @@ cor.test(vdata55$HSQ_total55, vdata55$LOS)
 cor.test(vdata55$HSQ_total55, eq5d_df$index)
 cor.test(vdata55$HSQ_total55, vdata55$EQ5D_VAS)
 
-# Test-retest, HSQ-55
+# Test-retest using ICC
+install.packages("irr")
+library(irr)
+
+# Calculate test-retest for HSQ-55 total score
 retest <- read_csv("retest.csv")
 retest55 <- retest %>% select(-c(HSQ_5, HSQ_20, HSQ_22, HSQ_23, HSQ_26, HSQ_29, HSQ_30, HSQ_35, HSQ_49, HSQ_50, HSQ_55, HSQ_65))
 retest55 <- retest55 %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_67)))
 retest1 <- retest55$HSQ_total[retest55$Session == 1]
 retest2 <- retest55$HSQ_total[retest55$Session == 2]
-cor.test(retest1, retest2)
+ICC_total <- data.frame(retest1, retest2)
+icc(ICC_total, model = "twoway", type = "agreement", unit = "single")
 
 # Calculate test-retest for factor 1
 retest_f1 <- retest %>% select(Session, HSQ_6, HSQ_7, HSQ_8, HSQ_9, HSQ_10, HSQ_13, HSQ_16, HSQ_21, HSQ_25, HSQ_27, HSQ_52)
 retest_f1 <- retest_f1 %>% mutate(HSQ_total = rowSums(across(HSQ_6:HSQ_52)))
 retest_f1a <- retest_f1$HSQ_total[retest_f1$Session == 1]
 retest_f1b <- retest_f1$HSQ_total[retest_f1$Session == 2]
-cor.test(retest_f1a, retest_f1b)
+ICC_f1 <- data.frame(retest_f1a, retest_f1b)
+icc(ICC_f1, model = "twoway", type = "agreement", unit = "single")
 
 # Calculate test-retest for factor 2
 retest_f2 <- retest %>% select(Session, HSQ_12, HSQ_18, HSQ_19, HSQ_32, HSQ_41, HSQ_43, HSQ_54, HSQ_58)
 retest_f2 <- retest_f2 %>% mutate(HSQ_total = rowSums(across(HSQ_12:HSQ_58)))
 retest_f2a <- retest_f2$HSQ_total[retest_f2$Session == 1]
 retest_f2b <- retest_f2$HSQ_total[retest_f2$Session == 2]
-cor.test(retest_f2a, retest_f2b)
+ICC_f2 <- data.frame(retest_f2a, retest_f2b)
+icc(ICC_f2, model = "twoway", type = "agreement", unit = "single")
 
 # Calculate test-retest for factor 3
 retest_f3 <- retest %>% select(Session, HSQ_31, HSQ_44, HSQ_47, HSQ_48, HSQ_53, HSQ_59, HSQ_60, HSQ_61, HSQ_62, HSQ_66, HSQ_67)
 retest_f3 <- retest_f3 %>% mutate(HSQ_total = rowSums(across(HSQ_31:HSQ_67)))
 retest_f3a <- retest_f3$HSQ_total[retest_f3$Session == 1]
 retest_f3b <- retest_f3$HSQ_total[retest_f3$Session == 2]
-cor.test(retest_f3a, retest_f3b)
+ICC_f3 <- data.frame(retest_f3a, retest_f3b)
+icc(ICC_f3, model = "twoway", type = "agreement", unit = "single")
 
 # Calculate test-retest for factor 4
 retest_f4 <- retest %>% select(Session, HSQ_2, HSQ_11, HSQ_14, HSQ_15, HSQ_39, HSQ_56, HSQ_57)
 retest_f4 <- retest_f4 %>% mutate(HSQ_total = rowSums(across(HSQ_2:HSQ_57)))
 retest_f4a <- retest_f4$HSQ_total[retest_f4$Session == 1]
 retest_f4b <- retest_f4$HSQ_total[retest_f4$Session == 2]
-cor.test(retest_f4a, retest_f4b)
+ICC_f4 <- data.frame(retest_f4a, retest_f4b)
+icc(ICC_f4, model = "twoway", type = "agreement", unit = "single")
 
 # Calculate test-retest for factor 5
 retest_f5 <- retest %>% select(Session, HSQ_3, HSQ_24, HSQ_46, HSQ_63, HSQ_64)
 retest_f5 <- retest_f5 %>% mutate(HSQ_total = rowSums(across(HSQ_3:HSQ_64)))
 retest_f5a <- retest_f5$HSQ_total[retest_f5$Session == 1]
 retest_f5b <- retest_f5$HSQ_total[retest_f5$Session == 2]
-cor.test(retest_f5a, retest_f5b)
+ICC_f5 <- data.frame(retest_f5a, retest_f5b)
+icc(ICC_f5, model = "twoway", type = "agreement", unit = "single")
 
 # Calculate test-retest for factor 6
 retest_f6 <- retest %>% select(Session, HSQ_1, HSQ_4, HSQ_17, HSQ_28, HSQ_34, HSQ_40, HSQ_45, HSQ_51)
 retest_f6 <- retest_f6 %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_51)))
 retest_f6a <- retest_f6$HSQ_total[retest_f6$Session == 1]
 retest_f6b <- retest_f6$HSQ_total[retest_f6$Session == 2]
-cor.test(retest_f6a, retest_f6b)
+ICC_f6 <- data.frame(retest_f6a, retest_f6b)
+icc(ICC_f6, model = "twoway", type = "agreement", unit = "single")
 
 # Calculate test-retest for factor 7
 retest_f7 <- retest %>% select(Session, HSQ_33, HSQ_36, HSQ_37, HSQ_38, HSQ_42)
 retest_f7 <- retest_f7 %>% mutate(HSQ_total = rowSums(across(HSQ_33:HSQ_42)))
 retest_f7a <- retest_f7$HSQ_total[retest_f7$Session == 1]
 retest_f7b <- retest_f7$HSQ_total[retest_f7$Session == 2]
-cor.test(retest_f7a, retest_f7b)
+ICC_f7 <- data.frame(retest_f7a, retest_f7b)
+icc(ICC_f7, model = "twoway", type = "agreement", unit = "single")
 
 
 ### Medium-length version (28-items) ###
@@ -309,7 +321,9 @@ retest28 <- retest %>% select(Session,
 retest28 <- retest28 %>% mutate(HSQ_total = rowSums(across(HSQ_16:HSQ_42)))
 retest28_1 <- retest28$HSQ_total[retest28$Session == 1]
 retest28_2 <- retest28$HSQ_total[retest28$Session == 2]
-cor.test(retest28_1, retest28_2)
+ICC28 <- data.frame(retest28_1, retest28_2)
+icc(ICC28, model = "twoway", type = "agreement", unit = "single")
+
 
 ### Short-length version (10 items) ###
 
@@ -332,10 +346,11 @@ t.test(HSQ_planned,HSQ_emergency)
 
 # Test-retest, HSQ-10
 retest10 <- retest %>% select(Session, HSQ_52, HSQ_44, HSQ_6, HSQ_51, HSQ_27, HSQ_16, HSQ_11, HSQ_41, HSQ_37, HSQ_24)
-retest10 <- retest10 %>% mutate(HSQ_total = rowSums(across(HSQ_55:HSQ_24)))
+retest10 <- retest10 %>% mutate(HSQ_total = rowSums(across(HSQ_52:HSQ_24)))
 retest10_1 <- retest10$HSQ_total[retest10$Session == 1]
 retest10_2 <- retest10$HSQ_total[retest10$Session == 2]
-cor.test(retest10_1, retest10_2)
+ICC10 <- data.frame(retest10_1, retest10_2)
+icc(ICC10, model = "twoway", type = "agreement", unit = "single")
 
 # Predictive validity, HSQ-10
 cor.test(HSQ28$HSQ_total, eq5d_df$index)
